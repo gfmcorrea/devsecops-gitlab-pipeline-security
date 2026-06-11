@@ -1,0 +1,67 @@
+.
+├── app
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   └── server.js
+├── appendices
+│   ├── commands-used.md
+│   ├── evidence-checklist.md
+│   ├── pipeline-notes.md
+│   └── tool-configuration-notes.md
+├── career-material.md
+├── docs
+│   ├── environment-setup.md
+│   ├── gitlab-ci-setup.md
+│   ├── pipeline-workflow.md
+│   ├── security-gates.md
+│   └── tools-used.md
+├── evidence
+│   ├── .gitkeep
+│   ├── reports
+│   ├── screenshots
+│   └── tool-outputs
+├── findings
+│   ├── 01-sast-insecure-code-pattern.md
+│   ├── 02-secret-detection-fake-secret.md
+│   ├── 03-vulnerable-dependency.md
+│   ├── 04-container-image-vulnerabilities.md
+│   └── 05-security-gate-observation.md
+├── .git
+│   ├── branches
+│   ├── COMMIT_EDITMSG
+│   ├── config
+│   ├── description
+│   ├── HEAD
+│   ├── hooks
+│   ├── index
+│   ├── info
+│   ├── logs
+│   ├── objects
+│   └── refs
+├── .gitignore
+├── .gitlab-ci.yml
+├── lessons-learned
+│   ├── lessons-learned.md
+│   └── skills-demonstrated.md
+├── methodology
+│   └── devsecops-methodology.md
+├── pipeline
+│   ├── artifacts-and-reports.md
+│   ├── container-scanning.md
+│   ├── dependency-scanning.md
+│   ├── pipeline-overview.md
+│   ├── sast.md
+│   ├── secret-scanning.md
+│   └── stages.md
+├── README.md
+├── remediation
+│   └── remediation-summary.md
+├── reports
+│   └── final-report.md
+└── scope
+    ├── rules-of-engagement.md
+    └── scope.md
+
+22 directories, 43 files

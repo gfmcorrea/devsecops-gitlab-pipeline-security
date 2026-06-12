@@ -1,0 +1,41 @@
+Final GitLab CI/CD Pipeline Summary
+
+Project:
+devsecops-gitlab-pipeline-security
+
+GitLab pipeline status:
+Passed
+
+Branch:
+main
+
+Pipeline source:
+web
+
+Jobs executed:
+setup
+sast
+secret_scan
+dependency_scan
+container_build
+container_scan
+report_summary
+
+Result:
+All 7 jobs passed successfully.
+
+Security tools executed:
+Semgrep
+Gitleaks
+npm audit
+Trivy
+
+Evidence:
+GitLab pipeline screenshots were captured.
+CI artifacts were downloaded and reviewed.
+No real secrets were identified in the reviewed evidence.
+Gitleaks outputs used redacted secret values.
+Trivy findings included vulnerability descriptions, not exposed credentials.
+
+Conclusion:
+The CI/CD pipeline was executed successfully in GitLab and produced real security scan artifacts.

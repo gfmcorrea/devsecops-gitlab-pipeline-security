@@ -1,0 +1,31 @@
+Final Findings Summary
+
+Finding 01 — SAST Insecure Code Pattern
+Status: Confirmed
+Severity: Medium
+Tool: Semgrep
+Evidence: Semgrep detected user-controlled request data flowing into eval() in app/server.js.
+
+Finding 02 — Secret Detection Fake Secret
+Status: Confirmed
+Severity: Medium
+Tool: Gitleaks
+Evidence: Gitleaks detected the demo-only fake API key pattern in app/server.js. The output was redacted.
+
+Finding 03 — Vulnerable Dependency
+Status: Confirmed
+Severity: High
+Tool: npm audit
+Evidence: npm audit found 8 vulnerabilities in the demo application dependencies: 3 low, 1 moderate, 4 high, and 0 critical.
+
+Finding 04 — Container Image Vulnerabilities
+Status: Confirmed
+Severity: Critical
+Tool: Trivy
+Evidence: Trivy found 6012 vulnerabilities in the local container image: 1478 low, 3161 medium, 1176 high, and 197 critical.
+
+Finding 05 — Security Gate Observation
+Status: Confirmed
+Severity: Informational
+Tool: GitLab CI/CD
+Evidence: The pipeline used allow_failure for learning-focused security scan jobs, while still saving artifacts and allowing manual review.

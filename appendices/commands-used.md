@@ -412,3 +412,32 @@ The GitLab pipeline successfully ran the security checks using open-source tools
 The scan outputs were saved as job artifacts.
 
 Before publishing evidence, I reviewed the outputs and avoided committing exported Docker image tar files.
+
+
+
+
+## Phase 9 — Final Result Summaries and Security Gate Documentation
+
+These files were updated to document the final GitLab CI/CD results and the security gate behavior.
+
+```bash
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+
+nano evidence/tool-outputs/24-final-pipeline-summary.txt
+nano evidence/tool-outputs/25-final-findings-summary.txt
+nano findings/05-security-gate-observation.md
+
+Files updated:
+
+evidence/tool-outputs/24-final-pipeline-summary.txt
+evidence/tool-outputs/25-final-findings-summary.txt
+findings/05-security-gate-observation.md
+appendices/commands-used.md
+
+Notes:
+
+The GitLab CI/CD pipeline passed successfully with 7 jobs.
+
+The final summaries were created to make the evidence easier to review.
+
+The security gate observation explains why some scan jobs used allow_failure in this learning project.

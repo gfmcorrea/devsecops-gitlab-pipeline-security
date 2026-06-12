@@ -1,0 +1,11 @@
+    35	
+    36	app.get('/demo/eval', (req, res) => {
+    37	  const expression = req.query.expression || '1+1';
+    38	
+    39	  // Demo-only insecure code pattern for SAST validation.
+    40	  // Do not use eval() in real applications.
+    41	  const result = eval(expression);
+    42	
+    43	  res.json({
+    44	    message: 'Demo-only eval endpoint',
+    45	    expression,

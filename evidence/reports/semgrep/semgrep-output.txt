@@ -1,0 +1,107 @@
+Unable to find image 'semgrep/semgrep:latest' locally
+latest: Pulling from semgrep/semgrep
+6a0ac1617861: Pulling fs layer
+2c68a6517c35: Pulling fs layer
+f52696c811ab: Pulling fs layer
+b92a3ac24cf3: Pulling fs layer
+bf8615bb637e: Pulling fs layer
+eafb7ab96c66: Pulling fs layer
+6bacc457c1eb: Pulling fs layer
+bd9ddc54bea9: Pulling fs layer
+1650d9204192: Pulling fs layer
+182f10801b84: Pulling fs layer
+b59b210d3cc5: Pulling fs layer
+6b8c92a63f51: Pulling fs layer
+bd9ddc54bea9: Pulling fs layer
+bd9ddc54bea9: Pulling fs layer
+fc5134f88670: Pulling fs layer
+296ee7286599: Pulling fs layer
+ff718e18f63c: Pulling fs layer
+3822859a0384: Pulling fs layer
+f3377d9c3f73: Pulling fs layer
+49bf7f99dc01: Pulling fs layer
+be13ab9795d9: Pulling fs layer
+ecedd066bd68: Pulling fs layer
+bd9ddc54bea9: Pulling fs layer
+934693bf9b8a: Pulling fs layer
+6a0ac1617861: Download complete
+eafb7ab96c66: Download complete
+bf8615bb637e: Download complete
+934693bf9b8a: Download complete
+b92a3ac24cf3: Download complete
+bd9ddc54bea9: Download complete
+2c68a6517c35: Download complete
+ff718e18f63c: Download complete
+182f10801b84: Download complete
+b59b210d3cc5: Download complete
+296ee7286599: Download complete
+6b8c92a63f51: Download complete
+fc5134f88670: Download complete
+3822859a0384: Download complete
+ecedd066bd68: Download complete
+1650d9204192: Download complete
+6a0ac1617861: Pull complete
+525bbd06114a: Download complete
+6bacc457c1eb: Download complete
+be13ab9795d9: Download complete
+be13ab9795d9: Pull complete
+bd9ddc54bea9: Pull complete
+eafb7ab96c66: Pull complete
+3822859a0384: Pull complete
+bf8615bb637e: Pull complete
+2c68a6517c35: Pull complete
+fc5134f88670: Pull complete
+49bf7f99dc01: Download complete
+f52696c811ab: Download complete
+f3377d9c3f73: Download complete
+49bf7f99dc01: Pull complete
+6bacc457c1eb: Pull complete
+b92a3ac24cf3: Pull complete
+1650d9204192: Pull complete
+f3377d9c3f73: Pull complete
+f52696c811ab: Pull complete
+ecedd066bd68: Pull complete
+6b8c92a63f51: Pull complete
+b59b210d3cc5: Pull complete
+934693bf9b8a: Pull complete
+296ee7286599: Pull complete
+ff718e18f63c: Pull complete
+182f10801b84: Pull complete
+Digest: sha256:f4791a54c891eabe1188248135574e6e03dfc31dfd3f3b747c7bec7079bfed1b
+Status: Downloaded newer image for semgrep/semgrep:latest
+               
+               
+┌─────────────┐
+│ Scan Status │
+└─────────────┘
+  Scanning 5 files tracked by git with 74 Code rules:
+  Scanning 1 file with 68 js rules.
+                  
+                  
+┌────────────────┐
+│ 1 Code Finding │
+└────────────────┘
+                 
+    app/server.js
+   ❯❯❱ javascript.lang.security.audit.code-string-concat.code-string-concat
+          ❰❰ Blocking ❱❱
+          Found data from an Express or Next web request flowing to `eval`. If this data is user-controllable
+          this can lead to execution of arbitrary system commands in the context of your application process.
+          Avoid `eval` whenever possible.                                                                    
+          Details: https://sg.run/96Yk                                                                       
+                                                                                                             
+           41┆ const result = eval(expression);
+
+                
+                
+┌──────────────┐
+│ Scan Summary │
+└──────────────┘
+✅ Scan completed successfully.
+ • Findings: 1 (1 blocking)
+ • Rules run: 68
+ • Targets scanned: 1
+ • Parsed lines: ~100.0%
+ • Scan was limited to files tracked by git
+ • For a detailed list of skipped files and lines, run semgrep with the --verbose flag
+Ran 68 rules on 1 file: 1 finding.

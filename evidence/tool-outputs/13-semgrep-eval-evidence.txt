@@ -1,0 +1,8 @@
+Semgrep eval finding evidence
+Check ID: javascript.lang.security.audit.code-string-concat.code-string-concat
+File: app/server.js
+Line: 41
+Severity: ERROR
+Message: Found data from an Express or Next web request flowing to `eval`. If this data is user-controllable this can lead to execution of arbitrary system commands in the context of your application process. Avoid `eval` whenever possible.
+CWE: CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')
+OWASP: A03:2021 - Injection, A05:2025 - Injection

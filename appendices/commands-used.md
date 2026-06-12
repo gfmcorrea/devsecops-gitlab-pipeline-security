@@ -120,3 +120,57 @@ I did not run `npm audit fix` during this phase because the goal was to collect 
 The vulnerable dependencies are part of the controlled demo application used for this portfolio project.
 
 A dependency finding should only be marked as confirmed after reviewing the real `npm audit` output.
+
+
+
+
+## Phase 4 — Local SAST with Semgrep
+
+These commands were used to run a local SAST scan against the demo Node.js application using Semgrep.
+
+```bash
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+git status
+
+docker --version
+docker info
+
+mkdir -p evidence/reports/semgrep
+mkdir -p evidence/screenshots/sast
+mkdir -p evidence/tool-outputs
+
+docker run --rm -v "$PWD:/src" -w /src semgrep/semgrep:latest semgrep scan --config p/javascript app 2>&1 | tee evidence/reports/semgrep/semgrep-output.txt
+
+docker run --rm -v "$PWD:/src" -w /src semgrep/semgrep:latest semgrep scan --config p/javascript app --json -o evidence/reports/semgrep/semgrep-report.json || true
+
+node -e "const r=require('./evidence/reports/semgrep/semgrep-report.json'); const results=r.results || []; console.log('Semgrep findings summary'); console.log('Total findings: ' + results.length); for (const item of results) { console.log('- ' + item.check_id + ' | ' + item.path + ':' + item.start.line + ' | ' + item.extra.message); }" | tee evidence/tool-outputs/12-semgrep-summary.txt
+
+node -e "const r=require('./evidence/reports/semgrep/semgrep-report.json'); const results=r.results || []; for (const item of results) { console.log('Semgrep eval finding evidence'); console.log('Check ID: ' + item.check_id); console.log('File: ' + item.path); console.log('Line: ' + item.start.line); console.log('Severity: ' + item.extra.severity); console.log('Message: ' + item.extra.message); console.log('CWE: ' + ((item.extra.metadata.cwe || []).join(', '))); console.log('OWASP: ' + ((item.extra.metadata.owasp || []).join(', '))); }" | tee evidence/tool-outputs/13-semgrep-eval-evidence.txt
+
+nl -ba app/server.js | sed -n '35,45p' | tee evidence/tool-outputs/14-semgrep-affected-code.txt
+```
+
+Evidence saved:
+
+```text
+evidence/reports/semgrep/semgrep-output.txt
+evidence/reports/semgrep/semgrep-report.json
+evidence/tool-outputs/12-semgrep-summary.txt
+evidence/tool-outputs/13-semgrep-eval-evidence.txt
+evidence/tool-outputs/14-semgrep-affected-code.txt
+
+evidence/screenshots/sast/02-semgrep-text-output.png
+evidence/screenshots/sast/03-semgrep-summary.png
+evidence/screenshots/sast/04-semgrep-eval-evidence.png
+evidence/screenshots/sast/05-semgrep-affected-code.png
+```
+
+Notes:
+
+I used Semgrep to run a local SAST scan against the demo Node.js application.
+
+The application contains a demo-only insecure code pattern using `eval()` in `app/server.js`.
+
+Semgrep confirmed one finding in `app/server.js`, where data from an Express request flows into `eval()`.
+
+This finding was marked as confirmed because the result is supported by the real Semgrep output.

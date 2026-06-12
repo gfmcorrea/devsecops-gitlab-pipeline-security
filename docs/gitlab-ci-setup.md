@@ -22,7 +22,8 @@ https://github.com/gfmcorrea/devsecops-gitlab-pipeline-security
 
 GitLab repository:
 
-[INSERT YOUR GITLAB PROJECT URL HERE]
+https://gitlab.com/gfmcorrea/devsecops-gitlab-pipeline-security
+
 Pipeline file
 
 The pipeline is defined in:

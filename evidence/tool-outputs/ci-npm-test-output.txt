@@ -1,0 +1,5 @@
+
+> devsecops-demo-app@1.0.0 test
+> echo "No automated tests configured for this demo app" && exit 0
+
+No automated tests configured for this demo app

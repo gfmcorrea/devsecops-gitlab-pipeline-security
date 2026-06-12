@@ -1,0 +1,42 @@
+[
+ {
+  "RuleID": "fake-demo-api-key",
+  "Description": "Demo-only fake API key used for secret scanning validation",
+  "StartLine": 5,
+  "EndLine": 5,
+  "StartColumn": 15,
+  "EndColumn": 60,
+  "Match": "REDACTED",
+  "Secret": "REDACTED",
+  "File": "evidence/tool-outputs/16-gitleaks-affected-code.txt",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 4.360306,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "Fingerprint": "evidence/tool-outputs/16-gitleaks-affected-code.txt:fake-demo-api-key:5"
+ },
+ {
+  "RuleID": "fake-demo-api-key",
+  "Description": "Demo-only fake API key used for secret scanning validation",
+  "StartLine": 9,
+  "EndLine": 9,
+  "StartColumn": 8,
+  "EndColumn": 53,
+  "Match": "REDACTED",
+  "Secret": "REDACTED",
+  "File": "app/server.js",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 4.360306,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "Fingerprint": "app/server.js:fake-demo-api-key:9"
+ }
+]

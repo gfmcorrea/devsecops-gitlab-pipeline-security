@@ -1,0 +1,25 @@
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+Finding:     const [1;3;mREDACTED[0m
+Secret:      [1;3;mREDACTED[0m
+RuleID:      fake-demo-api-key
+Entropy:     4.360306
+File:        app/server.js
+Line:        9
+Fingerprint: app/server.js:fake-demo-api-key:9
+
+Finding:     9	const [1;3;mREDACTED[0m
+Secret:      [1;3;mREDACTED[0m
+RuleID:      fake-demo-api-key
+Entropy:     4.360306
+File:        evidence/tool-outputs/16-gitleaks-affected-code.txt
+Line:        5
+Fingerprint: evidence/tool-outputs/16-gitleaks-affected-code.txt:fake-demo-api-key:5
+
+[90m4:10PM[0m [32mINF[0m [1mscanned ~42423408 bytes (42.42 MB) in 13.2s[0m
+[90m4:10PM[0m [33mWRN[0m [1mleaks found: 2[0m

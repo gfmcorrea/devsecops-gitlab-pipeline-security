@@ -349,25 +349,37 @@ In a real company, security gates should be tuned carefully before blocking depl
 
 
 
-## Phase 8 — GitLab Manual Pipeline Workflow Fix
+## Phase 8 — GitLab CI/CD Pipeline Execution
 
-When I tried to run the pipeline manually from the GitLab UI, GitLab showed this message:
+These steps were used to run the real GitLab CI/CD pipeline.
+
+GitLab project:
 
 ```text
-Pipeline cannot be run.
-The pipeline did not run. Review the workflow:rules configuration for the pipeline.
+https://gitlab.com/gfmcorrea/devsecops-gitlab-pipeline-security
 
-The pipeline syntax was valid, but the workflow: rules section did not allow pipelines started manually from the GitLab UI.
+Pipeline result:
 
-I updated the workflow rules to include:
+Status: Passed
+Jobs: 7
+Branch: main
+Pipeline source: web
 
-- if: '$CI_PIPELINE_SOURCE == "web"'
+Jobs executed:
 
-This allows manual pipelines started from:
+setup
+sast
+secret_scan
+dependency_scan
+container_build
+container_scan
+report_summary
 
-Build > Pipelines > New pipeline
+All jobs passed successfully.
 
-Updated workflow:
+The pipeline was first blocked by the workflow: rules configuration because manual pipelines from the GitLab UI use the web pipeline source.
+
+I updated the workflow rules to allow manual pipeline runs:
 
 workflow:
   rules:
@@ -376,6 +388,27 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "web"'
     - when: never
 
-Evidence saved:
+Evidence captured:
 
-evidence/screenshots/pipeline/03-pipeline-cannot-be-run-workflow-rules.png
+evidence/screenshots/gitlab/02-gitlab-project-imported.png
+evidence/screenshots/gitlab/03-gitlab-ci-yml-visible.png
+evidence/screenshots/gitlab/04-gitlab-runner-available.png
+evidence/screenshots/pipeline/02-gitlab-pipeline-started.png
+evidence/screenshots/pipeline/03-gitlab-pipeline-jobs-visible.png
+evidence/screenshots/pipeline/04-gitlab-all-jobs-passed.png
+
+CI artifacts downloaded and reviewed:
+
+evidence/reports/semgrep/
+evidence/reports/gitleaks/
+evidence/reports/dependency-check/
+evidence/reports/trivy/
+evidence/tool-outputs/
+
+Notes:
+
+The GitLab pipeline successfully ran the security checks using open-source tools.
+
+The scan outputs were saved as job artifacts.
+
+Before publishing evidence, I reviewed the outputs and avoided committing exported Docker image tar files.

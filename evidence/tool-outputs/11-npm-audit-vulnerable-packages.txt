@@ -1,0 +1,8 @@
+body-parser | severity: high | range: <=1.20.3 || 2.0.0-beta.1 - 2.0.2 | fix available: {"name":"express","version":"4.22.2","isSemVerMajor":false}
+cookie | severity: low | range: <0.7.0 | fix available: {"name":"express","version":"4.22.2","isSemVerMajor":false}
+express | severity: high | range: <=4.21.2 || 5.0.0-alpha.1 - 5.0.1 | fix available: {"name":"express","version":"4.22.2","isSemVerMajor":false}
+lodash | severity: high | range: <=4.17.23 | fix available: {"name":"lodash","version":"4.18.1","isSemVerMajor":false}
+path-to-regexp | severity: high | range: <=0.1.12 | fix available: {"name":"express","version":"4.22.2","isSemVerMajor":false}
+qs | severity: moderate | range: <=6.14.1 | fix available: {"name":"express","version":"4.22.2","isSemVerMajor":false}
+send | severity: low | range: <0.19.0 | fix available: {"name":"express","version":"4.22.2","isSemVerMajor":false}
+serve-static | severity: low | range: <=1.16.0 | fix available: true

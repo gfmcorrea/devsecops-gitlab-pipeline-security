@@ -83,3 +83,40 @@ The dependency versions were not fixed during this phase because the project nee
 
 
 
+## Phase 3 — Local Dependency Scanning with npm audit
+
+These commands were used to run a local dependency scan against the demo Node.js application.
+
+```bash
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+git status
+
+mkdir -p evidence/reports/dependency-check
+mkdir -p evidence/screenshots/dependency-scanning
+mkdir -p evidence/tool-outputs
+
+npm --prefix app audit 2>&1 | tee evidence/reports/dependency-check/npm-audit-output.txt
+npm --prefix app audit --json > evidence/reports/dependency-check/npm-audit-report.json || true
+
+node -e "const r=require('./evidence/reports/dependency-check/npm-audit-report.json'); console.log('npm audit vulnerability summary'); console.log(JSON.stringify(r.metadata.vulnerabilities, null, 2));" | tee evidence/tool-outputs/10-npm-audit-summary.txt
+```
+
+Evidence saved:
+
+```text
+evidence/reports/dependency-check/npm-audit-output.txt
+evidence/reports/dependency-check/npm-audit-report.json
+evidence/tool-outputs/10-npm-audit-summary.txt
+evidence/screenshots/dependency-scanning/01-npm-audit-output.png
+evidence/screenshots/dependency-scanning/02-npm-audit-output.png
+evidence/screenshots/dependency-scanning/02-npm-audit-summary.png
+evidence/screenshots/dependency-scanning/03-vulnerable-packages-summary.png
+```
+
+Notes:
+
+I did not run `npm audit fix` during this phase because the goal was to collect dependency scanning evidence first.
+
+The vulnerable dependencies are part of the controlled demo application used for this portfolio project.
+
+A dependency finding should only be marked as confirmed after reviewing the real `npm audit` output.

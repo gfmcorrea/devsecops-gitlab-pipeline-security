@@ -345,3 +345,37 @@ The security scan jobs save reports as GitLab artifacts.
 Some security scan jobs use allow_failure: true because this is a learning portfolio project with controlled demo findings.
 
 In a real company, security gates should be tuned carefully before blocking deployments.
+
+
+
+
+## Phase 8 — GitLab Manual Pipeline Workflow Fix
+
+When I tried to run the pipeline manually from the GitLab UI, GitLab showed this message:
+
+```text
+Pipeline cannot be run.
+The pipeline did not run. Review the workflow:rules configuration for the pipeline.
+
+The pipeline syntax was valid, but the workflow: rules section did not allow pipelines started manually from the GitLab UI.
+
+I updated the workflow rules to include:
+
+- if: '$CI_PIPELINE_SOURCE == "web"'
+
+This allows manual pipelines started from:
+
+Build > Pipelines > New pipeline
+
+Updated workflow:
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - when: never
+
+Evidence saved:
+
+evidence/screenshots/pipeline/03-pipeline-cannot-be-run-workflow-rules.png

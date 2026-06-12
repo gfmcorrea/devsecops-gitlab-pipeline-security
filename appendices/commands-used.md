@@ -494,3 +494,56 @@ The lessons learned file explains what I practiced and learned while building th
 The skills demonstrated file maps the project work to practical AppSec and DevSecOps skills.
 
 The career material file includes resume bullets, a LinkedIn project description, GitHub repository description, and interview talking points.
+
+
+
+
+## Phase 10 — Final Repository Review
+
+These commands were used to review the final repository before considering the project ready for portfolio use.
+
+```bash
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+
+git status
+
+grep -RniE "INSERT|TODO|PLACEHOLDER|YOUR_|REPLACE|TBD|TO BE ADDED|ADD SCREENSHOT|ADD EVIDENCE" . \
+  --exclude-dir=.git \
+  --exclude-dir=node_modules \
+  --exclude="*.json" \
+  --exclude="*.png" \
+  --exclude="*.jpg" \
+  --exclude="*.jpeg" \
+  --exclude="*.tar" \
+  --exclude="*.gz"
+
+find . -name "*.tar" -o -name "*.tar.gz" -o -name "*.zip" -o -name ".env" -o -name ".env.*"
+
+grep -RniE "password|token|secret|api_key|private_key|authorization|bearer|aws_access_key|github_pat|ghp_|glpat-" . \
+  --exclude-dir=.git \
+  --exclude-dir=node_modules \
+  --exclude="*.png" \
+  --exclude="*.jpg" \
+  --exclude="*.jpeg" \
+  --exclude="*.tar" \
+  --exclude="*.gz" \
+  | head -n 100
+
+find . -type f -size +10M -not -path "./.git/*" -exec ls -lh {} \;
+
+tree -a -L 3 -I ".git|node_modules|*.tar|*.tar.gz"
+
+Files updated:
+
+appendices/evidence-checklist.md
+appendices/commands-used.md
+
+Evidence saved:
+
+evidence/screenshots/environment/11-final-repository-structure.png
+
+Notes:
+
+The final review checked for placeholders, secrets, unnecessary large files, Docker image archives, and repository structure.
+
+The project was reviewed before being considered ready for GitHub portfolio use.

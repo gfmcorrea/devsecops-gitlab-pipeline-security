@@ -468,3 +468,29 @@ The remediation summary explains how each confirmed issue could be fixed in a re
 The documentation was updated using real results collected during local testing and GitLab CI/CD execution.
 
 
+## Lessons Learned, Skills Demonstrated and Career Material
+
+These files were updated to document lessons learned, skills demonstrated, and career material for resume, LinkedIn, GitHub, and interviews.
+
+```bash
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+
+nano lessons-learned/lessons-learned.md
+nano lessons-learned/skills-demonstrated.md
+nano career-material.md
+nano appendices/commands-used.md
+
+Files updated:
+
+lessons-learned/lessons-learned.md
+lessons-learned/skills-demonstrated.md
+career-material.md
+appendices/commands-used.md
+
+Notes:
+
+The lessons learned file explains what I practiced and learned while building the project.
+
+The skills demonstrated file maps the project work to practical AppSec and DevSecOps skills.
+
+The career material file includes resume bullets, a LinkedIn project description, GitHub repository description, and interview talking points.

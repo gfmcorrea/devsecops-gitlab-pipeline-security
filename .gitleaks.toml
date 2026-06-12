@@ -1,0 +1,18 @@
+title = "Gitleaks configuration for DevSecOps demo project"
+
+[[allowlists]]
+description = "Ignore local dependency folders and generated Gitleaks report"
+paths = [
+  '''node_modules''',
+  '''app/node_modules''',
+  '''evidence/reports/gitleaks/gitleaks-report\.json'''
+]
+
+[[rules]]
+id = "fake-demo-api-key"
+description = "Demo-only fake API key used for secret scanning validation"
+regex = '''FAKE_DEMO_API_KEY\s*=\s*['"][^'"]+['"]'''
+secretGroup = 0
+keywords = [
+  "FAKE_DEMO_API_KEY"
+]

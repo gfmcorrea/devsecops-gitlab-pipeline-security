@@ -1,0 +1,7 @@
+Gitleaks findings summary
+Total findings: 1
+- Rule: fake-demo-api-key
+  Description: Demo-only fake API key used for secret scanning validation
+  File: app/server.js
+  Line: 9
+  Secret: redacted

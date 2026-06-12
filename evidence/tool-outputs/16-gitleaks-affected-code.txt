@@ -1,0 +1,8 @@
+     5	const PORT = process.env.PORT || 3000;
+     6	
+     7	// Demo-only fake secret used for secret scanning validation.
+     8	// This is not a real credential and must never be used in production.
+     9	const FAKE_DEMO_API_KEY = 'demo_fake_key_do_not_use';
+    10	
+    11	app.get('/', (req, res) => {
+    12	  res.json({

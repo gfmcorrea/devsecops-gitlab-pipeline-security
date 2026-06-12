@@ -174,3 +174,55 @@ The application contains a demo-only insecure code pattern using `eval()` in `ap
 Semgrep confirmed one finding in `app/server.js`, where data from an Express request flows into `eval()`.
 
 This finding was marked as confirmed because the result is supported by the real Semgrep output.
+
+
+
+
+## Phase 5 — Local Secret Scanning with Gitleaks
+
+These commands were used to run a local secret scanning test against the demo repository using Gitleaks.
+
+```bash
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+git status
+
+mkdir -p evidence/reports/gitleaks
+mkdir -p evidence/screenshots/secret-scanning
+mkdir -p evidence/tool-outputs
+
+docker run --rm -v "$PWD:/repo" -w /repo zricethezav/gitleaks:latest detect --source . --config .gitleaks.toml --redact --no-git --verbose 2>&1 | tee evidence/reports/gitleaks/gitleaks-output.txt
+
+docker run --rm -v "$PWD:/repo" -w /repo zricethezav/gitleaks:latest detect --source . --config .gitleaks.toml --redact --no-git --report-format json --report-path evidence/reports/gitleaks/gitleaks-report.json || true
+
+node -e "const r=require('./evidence/reports/gitleaks/gitleaks-report.json'); console.log('Gitleaks findings summary'); console.log('Total findings: ' + r.length); for (const item of r) { console.log('- Rule: ' + (item.RuleID || item.RuleId || item.ruleID)); console.log('  Description: ' + item.Description); console.log('  File: ' + item.File); console.log('  Line: ' + item.StartLine); console.log('  Secret: redacted'); }" | tee evidence/tool-outputs/15-gitleaks-summary.txt
+
+nl -ba app/server.js | sed -n '5,12p' | tee evidence/tool-outputs/16-gitleaks-affected-code.txt
+```
+
+Evidence saved:
+
+```text
+.gitleaks.toml
+evidence/reports/gitleaks/gitleaks-output.txt
+evidence/reports/gitleaks/gitleaks-report.json
+evidence/tool-outputs/15-gitleaks-summary.txt
+evidence/tool-outputs/16-gitleaks-affected-code.txt
+
+evidence/screenshots/secret-scanning/01-gitleaks-text-output.png
+evidence/screenshots/secret-scanning/02-gitleaks-summary.png
+evidence/screenshots/secret-scanning/03-gitleaks-affected-code.png
+```
+
+Notes:
+
+I used Gitleaks to scan the repository for secrets.
+
+The project uses a fake demo API key only for secret scanning validation.
+
+The fake value is not a real credential and must never be used in production.
+
+I used a custom Gitleaks rule to detect the demo-only fake secret in a controlled way.
+
+The Gitleaks output was generated with `--redact` to avoid exposing secret values in reports.
+
+Gitleaks confirmed one finding in `app/server.js` on line 9.

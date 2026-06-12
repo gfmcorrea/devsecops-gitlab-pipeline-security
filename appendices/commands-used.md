@@ -441,3 +441,30 @@ The GitLab CI/CD pipeline passed successfully with 7 jobs.
 The final summaries were created to make the evidence easier to review.
 
 The security gate observation explains why some scan jobs used allow_failure in this learning project.
+
+
+## Final Report and Remediation Summary
+
+These files were updated with the final confirmed results and remediation guidance.
+
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+
+nano reports/final-report.md
+nano remediation/remediation-summary.md
+nano appendices/commands-used.md
+
+Files updated:
+
+reports/final-report.md
+remediation/remediation-summary.md
+appendices/commands-used.md
+
+Notes:
+
+The final report documents the full project scope, methodology, pipeline result, confirmed findings, evidence handling, limitations, and conclusion.
+
+The remediation summary explains how each confirmed issue could be fixed in a real environment.
+
+The documentation was updated using real results collected during local testing and GitLab CI/CD execution.
+
+

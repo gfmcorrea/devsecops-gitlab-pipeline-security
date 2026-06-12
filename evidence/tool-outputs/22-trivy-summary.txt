@@ -1,0 +1,8 @@
+Trivy vulnerability summary
+Total vulnerabilities: 6012
+{
+  "LOW": 1478,
+  "MEDIUM": 3161,
+  "HIGH": 1176,
+  "CRITICAL": 197
+}

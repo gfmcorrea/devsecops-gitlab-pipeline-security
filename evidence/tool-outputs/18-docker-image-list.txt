@@ -1,0 +1,1 @@
+devsecops-demo-app:local       d63ae1ecbdeb       1.46GB          371MB        

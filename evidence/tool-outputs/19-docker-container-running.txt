@@ -1,0 +1,1 @@
+eaac42b741bb   devsecops-demo-app:local   "docker-entrypoint.s…"   35 seconds ago   Up 34 seconds   0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp   devsecops-demo-app-test

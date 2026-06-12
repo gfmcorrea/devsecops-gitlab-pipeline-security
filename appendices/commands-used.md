@@ -226,3 +226,78 @@ I used a custom Gitleaks rule to detect the demo-only fake secret in a controlle
 The Gitleaks output was generated with `--redact` to avoid exposing secret values in reports.
 
 Gitleaks confirmed one finding in `app/server.js` on line 9.
+
+
+
+
+## Phase 6 — Local Docker Build and Trivy Container Scanning
+
+These commands were used to build the demo application container image locally, run the container, validate the application, and scan the image with Trivy.
+
+```bash
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+git status
+
+mkdir -p evidence/reports/trivy
+mkdir -p evidence/screenshots/container-scanning
+mkdir -p evidence/tool-outputs
+
+docker build -t devsecops-demo-app:local app 2>&1 | tee evidence/tool-outputs/17-docker-build-output.txt
+
+docker images | grep devsecops-demo-app | tee evidence/tool-outputs/18-docker-image-list.txt
+
+docker run --rm -d --name devsecops-demo-app-test -p 3001:3000 devsecops-demo-app:local
+
+docker ps | grep devsecops-demo-app-test | tee evidence/tool-outputs/19-docker-container-running.txt
+
+curl -i http://localhost:3001/ | tee evidence/tool-outputs/20-container-curl-homepage.txt
+
+curl -i http://localhost:3001/health | tee evidence/tool-outputs/21-container-curl-health.txt
+
+docker stop devsecops-demo-app-test
+
+docker save devsecops-demo-app:local -o evidence/tool-outputs/devsecops-demo-app-local.tar
+
+docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:latest image --input evidence/tool-outputs/devsecops-demo-app-local.tar --severity LOW,MEDIUM,HIGH,CRITICAL 2>&1 | tee evidence/reports/trivy/trivy-output.txt
+
+docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:latest image --input evidence/tool-outputs/devsecops-demo-app-local.tar --severity LOW,MEDIUM,HIGH,CRITICAL --format json --output evidence/reports/trivy/trivy-report.json || true
+
+node -e "const r=require('./evidence/reports/trivy/trivy-report.json'); const counts={LOW:0,MEDIUM:0,HIGH:0,CRITICAL:0}; let total=0; for (const result of r.Results || []) { for (const v of result.Vulnerabilities || []) { counts[v.Severity]=(counts[v.Severity]||0)+1; total++; } } console.log('Trivy vulnerability summary'); console.log('Total vulnerabilities: ' + total); console.log(JSON.stringify(counts, null, 2));" | tee evidence/tool-outputs/22-trivy-summary.txt
+
+node -e "const r=require('./evidence/reports/trivy/trivy-report.json'); const vulns=[]; for (const result of r.Results || []) { for (const v of result.Vulnerabilities || []) { vulns.push({target: result.Target, id: v.VulnerabilityID, pkg: v.PkgName, installed: v.InstalledVersion, fixed: v.FixedVersion || 'not listed', severity: v.Severity, title: v.Title || ''}); } } console.log('Trivy top vulnerability examples'); for (const v of vulns.slice(0,20)) { console.log('- ' + v.severity + ' | ' + v.id + ' | ' + v.pkg + ' | installed: ' + v.installed + ' | fixed: ' + v.fixed); }" | tee evidence/tool-outputs/23-trivy-vulnerability-examples.txt
+```
+
+Evidence saved:
+
+```text
+app/.dockerignore
+evidence/reports/trivy/trivy-output.txt
+evidence/reports/trivy/trivy-report.json
+evidence/tool-outputs/17-docker-build-output.txt
+evidence/tool-outputs/18-docker-image-list.txt
+evidence/tool-outputs/19-docker-container-running.txt
+evidence/tool-outputs/20-container-curl-homepage.txt
+evidence/tool-outputs/21-container-curl-health.txt
+evidence/tool-outputs/22-trivy-summary.txt
+evidence/tool-outputs/23-trivy-vulnerability-examples.txt
+
+evidence/screenshots/container-scanning/01-docker-build-output.png
+evidence/screenshots/container-scanning/02-docker-image-list.png
+evidence/screenshots/container-scanning/03-docker-container-running.png
+evidence/screenshots/container-scanning/04-container-curl-validation.png
+evidence/screenshots/container-scanning/05-trivy-text-output.png
+evidence/screenshots/container-scanning/06-trivy-summary.png
+evidence/screenshots/container-scanning/07-trivy-vulnerability-examples.png
+```
+
+Notes:
+
+I built the demo application as a Docker image and validated that it worked locally.
+
+I used Trivy to scan the image for known vulnerabilities.
+
+The scan found 6012 total vulnerabilities: 1478 low, 3161 medium, 1176 high, and 197 critical.
+
+This finding was marked as confirmed because the result is supported by the real Trivy output.
+
+The exported Docker image tar file was used for local scanning and should not be committed to GitHub.

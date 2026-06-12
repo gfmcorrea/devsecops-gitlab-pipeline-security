@@ -1,0 +1,78 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  35.33kB
+Step 1/7 : FROM node:18-bullseye
+18-bullseye: Pulling from library/node
+54107f2de180: Pulling fs layer
+8c1ed1def9d2: Pulling fs layer
+9fa90b7e1816: Pulling fs layer
+06b6c820e694: Pulling fs layer
+7704b1a39512: Pulling fs layer
+762aa0aa2e63: Pulling fs layer
+9a69a0203501: Pulling fs layer
+e94932625c5a: Pulling fs layer
+9fa90b7e1816: Download complete
+7704b1a39512: Download complete
+8c1ed1def9d2: Download complete
+54107f2de180: Download complete
+06b6c820e694: Download complete
+f581832baf56: Download complete
+b146998dfef1: Download complete
+54107f2de180: Pull complete
+762aa0aa2e63: Download complete
+06b6c820e694: Pull complete
+9a69a0203501: Download complete
+9a69a0203501: Pull complete
+e94932625c5a: Download complete
+e94932625c5a: Pull complete
+7704b1a39512: Pull complete
+762aa0aa2e63: Pull complete
+9fa90b7e1816: Pull complete
+8c1ed1def9d2: Pull complete
+Digest: sha256:0d9e9a8dcd5a83ea737ed92227a6591a31ad70c8bb722b0c51aff7ae23a88b6a
+Status: Downloaded newer image for node:18-bullseye
+ ---> 0d9e9a8dcd5a
+Step 2/7 : WORKDIR /app
+ ---> Running in 8de93962bf12
+ ---> Removed intermediate container 8de93962bf12
+ ---> 9aaf6785b30c
+Step 3/7 : COPY package*.json ./
+ ---> 15f3e1f36b1f
+Step 4/7 : RUN npm install --omit=dev
+ ---> Running in 3f66a048c2af
+
+added 69 packages, and audited 70 packages in 2s
+
+12 packages are looking for funding
+  run `npm fund` for details
+
+8 vulnerabilities (3 low, 1 moderate, 4 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[91mnpm notice
+npm notice New major version of npm available! 10.8.2 -> 11.17.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+npm notice To update run: npm install -g npm@11.17.0
+npm notice
+[0m ---> Removed intermediate container 3f66a048c2af
+ ---> 0920ea30c541
+Step 5/7 : COPY server.js ./
+ ---> eeb9075c2f05
+Step 6/7 : EXPOSE 3000
+ ---> Running in 13b3d817ede2
+ ---> Removed intermediate container 13b3d817ede2
+ ---> b1c5cb08f79e
+Step 7/7 : CMD ["npm", "start"]
+ ---> Running in ce3325748ea5
+ ---> Removed intermediate container ce3325748ea5
+ ---> d63ae1ecbdeb
+Successfully built d63ae1ecbdeb
+Successfully tagged devsecops-demo-app:local

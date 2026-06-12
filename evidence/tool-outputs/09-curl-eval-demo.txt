@@ -1,0 +1,13 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    67  100    67    0     0  28669      0 --:--:-- --:--:-- --:--:-- 33500
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 67
+ETag: W/"43-3cwFPvE0QVgx6r/a9jMjIjDXZAU"
+Date: Fri, 12 Jun 2026 02:47:39 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"message":"Demo-only eval endpoint","expression":"1+1","result":2}

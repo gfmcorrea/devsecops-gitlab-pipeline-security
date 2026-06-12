@@ -1,0 +1,13 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    68  100    68    0     0  35527      0 --:--:-- --:--:-- --:--:-- 68000
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 68
+ETag: W/"44-Ls8yvPL363P72lzAp64k5tE4jRI"
+Date: Fri, 12 Jun 2026 02:50:44 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"message":"Lodash demo endpoint","firstItem":"sast","totalItems":4}

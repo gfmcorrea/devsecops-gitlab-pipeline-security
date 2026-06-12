@@ -1,0 +1,23 @@
+{
+  "name": "devsecops-demo-app",
+  "version": "1.0.0",
+  "description": "Safe demo Node.js application used for a DevSecOps GitLab CI/CD security pipeline project.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"No automated tests configured for this demo app\" && exit 0"
+  },
+  "keywords": [
+    "devsecops",
+    "gitlab-ci",
+    "application-security",
+    "security-pipeline",
+    "portfolio"
+  ],
+  "author": "Gabriel Freitas Correa",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.18.2",
+    "lodash": "4.17.20"
+  }
+}

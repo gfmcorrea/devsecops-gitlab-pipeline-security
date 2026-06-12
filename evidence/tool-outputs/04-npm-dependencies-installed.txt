@@ -1,0 +1,4 @@
+devsecops-demo-app@1.0.0 /root/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security/app
+├── express@4.18.2
+└── lodash@4.17.20
+

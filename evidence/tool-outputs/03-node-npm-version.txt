@@ -1,0 +1,4 @@
+root@gfmcorrea:~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security# node -v
+v18.19.1
+root@gfmcorrea:~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security# npm -v
+9.2.0

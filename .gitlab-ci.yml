@@ -1,0 +1,176 @@
+# DevSecOps Security Pipeline with GitLab CI/CD
+#
+# This pipeline is part of a safe portfolio project.
+# It runs security checks against a local demo Node.js application.
+#
+# Tools used:
+# - Semgrep for SAST
+# - Gitleaks for secret scanning
+# - npm audit for dependency scanning
+# - Docker for image build
+# - Trivy for container image scanning
+#
+# No external targets are scanned.
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - when: never
+
+stages:
+  - setup
+  - sast
+  - secret_scan
+  - dependency_scan
+  - container_build
+  - container_scan
+  - report_summary
+
+variables:
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  IMAGE_NAME: devsecops-demo-app
+  IMAGE_TAG: "$CI_COMMIT_SHORT_SHA"
+
+default:
+  interruptible: true
+  artifacts:
+    expire_in: 7 days
+
+setup:
+  stage: setup
+  image: node:18-bullseye
+  script:
+    - echo "Starting setup stage"
+    - mkdir -p evidence/tool-outputs
+    - node -v | tee evidence/tool-outputs/ci-node-version.txt
+    - npm -v | tee evidence/tool-outputs/ci-npm-version.txt
+    - cd app
+    - npm install
+    - npm list --depth=0 2>&1 | tee ../evidence/tool-outputs/ci-npm-dependencies.txt
+    - npm test 2>&1 | tee ../evidence/tool-outputs/ci-npm-test-output.txt
+  artifacts:
+    when: always
+    paths:
+      - evidence/tool-outputs/ci-node-version.txt
+      - evidence/tool-outputs/ci-npm-version.txt
+      - evidence/tool-outputs/ci-npm-dependencies.txt
+      - evidence/tool-outputs/ci-npm-test-output.txt
+      - app/package-lock.json
+
+sast:
+  stage: sast
+  image:
+    name: semgrep/semgrep:latest
+    entrypoint: [""]
+  script:
+    - echo "Starting SAST stage with Semgrep"
+    - mkdir -p evidence/reports/semgrep evidence/tool-outputs
+    - semgrep --version | tee evidence/tool-outputs/ci-semgrep-version.txt
+    - semgrep scan --config p/javascript app 2>&1 | tee evidence/reports/semgrep/ci-semgrep-output.txt || true
+    - semgrep scan --config p/javascript app --json -o evidence/reports/semgrep/ci-semgrep-report.json || true
+    - grep -Ri "eval" evidence/reports/semgrep/ > evidence/tool-outputs/ci-semgrep-eval-evidence.txt || true
+    - echo "Semgrep scan completed. Review artifacts before confirming findings."
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - evidence/reports/semgrep/
+      - evidence/tool-outputs/ci-semgrep-version.txt
+      - evidence/tool-outputs/ci-semgrep-eval-evidence.txt
+
+secret_scan:
+  stage: secret_scan
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - echo "Starting secret scanning stage with Gitleaks"
+    - mkdir -p evidence/reports/gitleaks evidence/tool-outputs
+    - gitleaks version | tee evidence/tool-outputs/ci-gitleaks-version.txt
+    - gitleaks detect --source . --config .gitleaks.toml --redact --no-git --verbose 2>&1 | tee evidence/reports/gitleaks/ci-gitleaks-output.txt || true
+    - gitleaks detect --source . --config .gitleaks.toml --redact --no-git --report-format json --report-path evidence/reports/gitleaks/ci-gitleaks-report.json || true
+    - echo "Gitleaks scan completed. Review artifacts before confirming findings."
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - evidence/reports/gitleaks/
+      - evidence/tool-outputs/ci-gitleaks-version.txt
+
+dependency_scan:
+  stage: dependency_scan
+  image: node:18-bullseye
+  script:
+    - echo "Starting dependency scanning stage with npm audit"
+    - mkdir -p evidence/reports/dependency-check evidence/tool-outputs
+    - npm --prefix app audit 2>&1 | tee evidence/reports/dependency-check/ci-npm-audit-output.txt || true
+    - npm --prefix app audit --json > evidence/reports/dependency-check/ci-npm-audit-report.json || true
+    - node -e "const r=require('./evidence/reports/dependency-check/ci-npm-audit-report.json'); console.log('npm audit vulnerability summary'); console.log(JSON.stringify(r.metadata.vulnerabilities, null, 2));" | tee evidence/tool-outputs/ci-npm-audit-summary.txt
+    - echo "Dependency scan completed. Review artifacts before confirming findings."
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - evidence/reports/dependency-check/
+      - evidence/tool-outputs/ci-npm-audit-summary.txt
+
+container_build:
+  stage: container_build
+  image: docker:24-cli
+  services:
+    - name: docker:24-dind
+      alias: docker
+  script:
+    - echo "Starting Docker build stage"
+    - mkdir -p evidence/tool-outputs
+    - docker info
+    - docker build -t "$IMAGE_NAME:$IMAGE_TAG" app 2>&1 | tee evidence/tool-outputs/ci-docker-build-output.txt
+    - docker images | grep "$IMAGE_NAME" | tee evidence/tool-outputs/ci-docker-image-list.txt
+    - docker save "$IMAGE_NAME:$IMAGE_TAG" -o evidence/tool-outputs/devsecops-demo-app-ci.tar
+    - ls -lh evidence/tool-outputs/devsecops-demo-app-ci.tar
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths:
+      - evidence/tool-outputs/ci-docker-build-output.txt
+      - evidence/tool-outputs/ci-docker-image-list.txt
+      - evidence/tool-outputs/devsecops-demo-app-ci.tar
+
+container_scan:
+  stage: container_scan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  needs:
+    - job: container_build
+      artifacts: true
+  script:
+    - echo "Starting container scanning stage with Trivy"
+    - mkdir -p evidence/reports/trivy evidence/tool-outputs
+    - trivy --version | tee evidence/tool-outputs/ci-trivy-version.txt
+    - trivy image --input evidence/tool-outputs/devsecops-demo-app-ci.tar --severity LOW,MEDIUM,HIGH,CRITICAL 2>&1 | tee evidence/reports/trivy/ci-trivy-output.txt || true
+    - trivy image --input evidence/tool-outputs/devsecops-demo-app-ci.tar --severity LOW,MEDIUM,HIGH,CRITICAL --format json --output evidence/reports/trivy/ci-trivy-report.json || true
+    - echo "Trivy scan completed. Review artifacts before confirming findings."
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - evidence/reports/trivy/
+      - evidence/tool-outputs/ci-trivy-version.txt
+
+report_summary:
+  stage: report_summary
+  image: alpine:3.20
+  script:
+    - echo "DevSecOps pipeline completed."
+    - echo "Review all scan artifacts before confirming findings."
+    - echo "Redact sensitive values before publishing evidence."
+    - echo "Generated report files:"
+    - find evidence -type f | sort || true
+  artifacts:
+    when: always
+    paths:
+      - evidence/

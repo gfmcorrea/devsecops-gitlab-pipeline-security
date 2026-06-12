@@ -301,3 +301,47 @@ The scan found 6012 total vulnerabilities: 1478 low, 3161 medium, 1176 high, and
 This finding was marked as confirmed because the result is supported by the real Trivy output.
 
 The exported Docker image tar file was used for local scanning and should not be committed to GitHub.
+
+
+
+
+## Phase 7 — GitLab CI/CD Pipeline Configuration
+
+These commands were used to review and update the GitLab CI/CD pipeline file.
+
+```bash
+cd ~/Cybersecurity-Portfolio/devsecops-gitlab-pipeline-security
+git status
+sed -n '1,260p' .gitlab-ci.yml
+git diff -- .gitlab-ci.yml
+
+Files updated:
+
+.gitlab-ci.yml
+appendices/commands-used.md
+
+Notes:
+
+I updated the GitLab CI/CD pipeline to include the following stages:
+
+setup
+sast
+secret_scan
+dependency_scan
+container_build
+container_scan
+report_summary
+
+The pipeline uses open-source tools:
+
+Semgrep for SAST
+Gitleaks for secret scanning
+npm audit for dependency scanning
+Docker for image build
+Trivy for container image scanning
+
+The security scan jobs save reports as GitLab artifacts.
+
+Some security scan jobs use allow_failure: true because this is a learning portfolio project with controlled demo findings.
+
+In a real company, security gates should be tuned carefully before blocking deployments.
